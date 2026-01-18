@@ -1,5 +1,5 @@
 project:
-  name: "linear-regression-housing"
+  name: "linear-regression-health-creatine"
 
 paths:
   raw_dir: "data/raw"
@@ -9,22 +9,22 @@ paths:
   figures_dir: "reports/figures"
 
 data:
-  target_col: "SalePrice"
+  target_col: "serum_creatinine"
   log_target: true # Here Is True because i wanna log transform the target
-  id: "Id"
   test_size: 0.30
   random_state: 42
 
 
 training:
-  mode: "cv"          # "cv" OR "val" cv = cross validation
+  mode: "val"          # "cv" OR "val" cv = cross validation
   val_size: 0.2       # used only if mode="val" (split from train, not from full data)
   cv_folds: 5         # used only if mode="cv"
 
 model:
   name: "model.joblib"
-  type: "linear"      # later i can add "ridge", "lasso" etc...
+  type: "ridge"          # "linear" | "ridge" | "lasso" | "elasticnet"
   fit_intercept: true
+  alpha: 1.0             # regularization strength
 
 evaluation:
   save_figures: true

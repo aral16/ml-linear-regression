@@ -71,15 +71,15 @@ def preprocess(config_path: str = "config.yaml") -> PreprocessArtifacts:
     ensure_dir(processed_dir)
     ensure_dir(models_dir)
 
-    train_path = os.path.join(raw_dir, "train.csv")
+    train_path = os.path.join(raw_dir, "heart_failure_clinical_records_dataset.csv")
     if not os.path.exists(train_path):
-        raise FileNotFoundError(f"Missing {train_path}. Put Kaggle train.csv into data/raw/")
+        raise FileNotFoundError(f"Missing {train_path}. Put UCI Machine Learning Repository dataset into data/raw/")
 
     df = pd.read_csv(train_path)
 
-    target_col = cfg["data"].get("target_col", "SalePrice")
+    target_col = cfg["data"].get("target_col")
     if target_col not in df.columns:
-        raise ValueError(f"Target column '{target_col}' not found in train.csv")
+        raise ValueError(f"Target column '{target_col}' not found in heart_failure_clinical_records_dataset.csv")
 
     y = np.log1p(df[target_col].to_numpy()) # Here, I'm log transform the target column value base on observation from the histogramm in the notebook 'target_distribution.ipynb'
 
