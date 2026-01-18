@@ -1,0 +1,31 @@
+project:
+  name: "linear-regression-energy-consumption"
+
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "reports/figures"
+
+data:
+  target_col: "Heating_Load"
+  log_target: false # Here is false because i don't wanna log transform the target.
+  test_size: 0.30
+  random_state: 42
+
+
+training:
+  mode: "cv"          # "cv" OR "val" cv = cross validation
+  val_size: 0.2       # used only if mode="val" (split from train, not from full data)
+  cv_folds: 5         # used only if mode="cv"
+
+model:
+  name: "model.joblib"
+  type: "linear"          # "linear" | "ridge" | "lasso" | "elasticnet"
+  fit_intercept: true
+  
+
+evaluation:
+  save_figures: true
+

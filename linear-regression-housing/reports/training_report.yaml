@@ -1,11 +1,11 @@
 training_mode: cv
 cv:
   folds: 5
-  MAE_mean: 0.10454275856432657
-  MAE_std: 0.003602580152923258
-  RMSE_mean: 0.19065935936254244
-  RMSE_std: 0.03504656104935276
-  R2_mean: 0.7517003784800222
-  R2_std: 0.10622332020617038
+  MAE_mean: 0.10450511248799259
+  MAE_std: 0.003651583192606214
+  RMSE_mean: 0.19045715200939908
+  RMSE_std: 0.035195855964916894
+  R2_mean: 0.7521688076972226
+  R2_std: 0.1064760415920991
 model_path: models/model.joblib
 coefficients_path: models/coefficients.csv
