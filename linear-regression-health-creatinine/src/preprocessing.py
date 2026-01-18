@@ -78,13 +78,12 @@ def preprocess(config_path: str = "config.yaml") -> PreprocessArtifacts:
     df = pd.read_csv(train_path)
 
     target_col = cfg["data"].get("target_col", "SalePrice")
-    id_col = cfg["data"].get("id_col")
     if target_col not in df.columns:
         raise ValueError(f"Target column '{target_col}' not found in train.csv")
 
     y = np.log1p(df[target_col].to_numpy()) # Here, I'm log transform the target column value base on observation from the histogramm in the notebook 'target_distribution.ipynb'
 
-    X = df.drop(columns=[target_col,id_col])
+    X = df.drop(columns=[target_col])
 
     # 1) Always split off TEST first (untouched until final evaluation)
     X_train_full, X_test_df, y_train_full, y_test = train_test_split(

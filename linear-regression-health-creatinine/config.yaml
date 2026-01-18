@@ -11,7 +11,7 @@ paths:
 data:
   target_col: "SalePrice"
   log_target: true # Here Is True because i wanna log transform the target
-  id_col: "Id"
+  id: "Id"
   test_size: 0.30
   random_state: 42
 
