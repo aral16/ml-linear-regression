@@ -1,0 +1,31 @@
+project:
+  name: "linear-regression-housing"
+
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "reports/figures"
+
+data:
+  target_col: "SalePrice"
+  log_target: true # Here Is True because i wanna log transform the target
+  id: "Id"
+  test_size: 0.30
+  random_state: 42
+
+
+training:
+  mode: "cv"          # "cv" OR "val" cv = cross validation
+  val_size: 0.2       # used only if mode="val" (split from train, not from full data)
+  cv_folds: 5         # used only if mode="cv"
+
+model:
+  name: "model.joblib"
+  type: "linear"      # later i can add "ridge", "lasso" etc...
+  fit_intercept: true
+
+evaluation:
+  save_figures: true
+
