@@ -1,0 +1,16 @@
+training:
+  training_mode: val
+  val:
+    MAE: 0.16017511237873355
+    RMSE: 0.24004568941869162
+    R2: 0.18078157188313015
+  model_path: models/model.joblib
+  coefficients_path: models/coefficients.csv
+test:
+  MAE: 0.5684551616906376
+  RMSE: 1.1084225979897868
+  R2: 0.00036610497826095045
+baseline_mean:
+  MAE: 0.5970459081836328
+  RMSE: 1.1098888881372686
+  R2: -0.0022803997550768784

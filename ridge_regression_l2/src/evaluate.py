@@ -59,6 +59,7 @@ def evaluate(config_path: str = "config.yaml") -> dict:
     # Load test data
     X_test = load_matrix(os.path.join(processed_dir, "X_test"))
     y_test = np.load(os.path.join(processed_dir, "y_test.npy"))
+    y_train = np.load(os.path.join(processed_dir, "y_train.npy")) # Loading this to creating my baseline metrics
 
     # Load model
     model_name = cfg["model"]["name"]
@@ -76,8 +77,13 @@ def evaluate(config_path: str = "config.yaml") -> dict:
         # Metrics on ORIGINAL scale (most interpretable)
         report["test"] = regression_metrics(y_test_orig, y_pred_orig)
 
-        # Optional: also report metrics in LOG space (useful for debugging)
-        #report["test_log_space"] = regression_metrics(y_test, y_pred)
+        # Baseline: predict mean(y_train) on ORIGINAL scale
+        y_train_orig = np.expm1(y_train)
+        baseline_value = float(np.mean(y_train_orig))
+        y_base_orig = np.full(shape=y_test_orig.shape, fill_value=baseline_value)
+
+        report["baseline_mean"] = regression_metrics(y_test_orig, y_base_orig)
+        report["test"] = regression_metrics(y_test_orig, y_pred_orig)
 
         # Residuals on original scale
         residuals = y_test_orig - y_pred_orig # Residuals tell you how your model is wrong, not just how much. so. it's elle you how far each prediction is from reality and also in which direction the model is wrong
@@ -89,6 +95,12 @@ def evaluate(config_path: str = "config.yaml") -> dict:
         y_label = "Residual (true - pred) (original scale)"
     else:
         # Normal case: everything already in original space
+
+        # Baseline on original scale
+        baseline_value = float(np.mean(y_train))
+        y_base = np.full(shape=y_test.shape, fill_value=baseline_value)
+
+        report["baseline_mean"] = regression_metrics(y_test, y_base)
         report["test"] = regression_metrics(y_test, y_pred)
 
         residuals = y_test - y_pred

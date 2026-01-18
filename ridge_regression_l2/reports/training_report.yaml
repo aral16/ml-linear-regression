@@ -1,0 +1,7 @@
+training_mode: val
+val:
+  MAE: 0.16017511237873355
+  RMSE: 0.24004568941869162
+  R2: 0.18078157188313015
+model_path: models/model.joblib
+coefficients_path: models/coefficients.csv

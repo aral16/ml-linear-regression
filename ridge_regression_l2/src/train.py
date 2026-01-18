@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import yaml
 from scipy import sparse
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold
 
@@ -38,6 +38,33 @@ def load_matrix(path_base: str):
     return np.load(path_base + ".npy", allow_pickle=False)
 
 
+
+def make_model(cfg: dict):
+    mcfg = cfg["model"]
+    mtype = mcfg.get("type", "linear").lower()
+    fit_intercept = bool(mcfg.get("fit_intercept", True))
+
+    if mtype == "linear":
+        return LinearRegression(fit_intercept=fit_intercept)
+
+    alpha = float(mcfg.get("alpha", 1.0))
+
+    if mtype == "ridge":
+        return Ridge(alpha=alpha, fit_intercept=fit_intercept, random_state=cfg["data"]["random_state"])
+
+    if mtype == "lasso":
+        # max_iter helps convergence
+        return Lasso(alpha=alpha, fit_intercept=fit_intercept, max_iter=10000, random_state=cfg["data"]["random_state"])
+
+    if mtype == "elasticnet":
+        l1_ratio = float(mcfg.get("l1_ratio", 0.5))
+        return ElasticNet(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept,
+                          max_iter=10000, random_state=cfg["data"]["random_state"])
+
+    raise ValueError("model.type must be one of: linear, ridge, lasso, elasticnet")
+
+
+
 def regression_metrics(y_true, y_pred) -> dict:
     mae = mean_absolute_error(y_true, y_pred)
     mse = mean_squared_error(y_true, y_pred)
@@ -60,8 +87,9 @@ def train(config_path: str = "config.yaml") -> dict:
     X_train = load_matrix(os.path.join(processed_dir, "X_train"))
     y_train = np.load(os.path.join(processed_dir, "y_train.npy"))
     feature_names = joblib.load(os.path.join(processed_dir, "feature_names.joblib"))
+    
+    model = make_model(cfg) # Here it's creating the model object(linear regression or ridge, or lasso etc..)
 
-    model = LinearRegression(fit_intercept=cfg["model"].get("fit_intercept", True))
 
     train_report = {"training_mode": mode}
 
@@ -75,7 +103,9 @@ def train(config_path: str = "config.yaml") -> dict:
             X_va = X_train[va_idx] if sparse.issparse(X_train) else X_train[va_idx, :] # Here I'm selecting only rows that have index in va_idx.
             y_tr, y_va = y_train[tr_idx], y_train[va_idx]
 
-            model_fold = LinearRegression(fit_intercept=cfg["model"].get("fit_intercept", True))
+            
+            model_fold = make_model(cfg) # Here it's creating the model object(linear regression or ridge, or lasso etc..)
+
             model_fold.fit(X_tr, y_tr) # here it's training the model for the actual fold only
             y_va_pred = model_fold.predict(X_va) # here it's predicts only for that fold.
 
