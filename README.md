@@ -1,5 +1,3 @@
-# ml-linear-regression
-
 # Linear Models Portfolio — Regression Applications
 
 This repository group showcases three applied machine learning projects built to develop deep intuition around linear modeling, regression assumptions, error analysis, and regularization.
