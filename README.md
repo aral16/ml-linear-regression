@@ -39,8 +39,8 @@ Architectural geometry introduces nonlinear effects that violate linear assumpti
 ---
 
 ### 3️⃣ Ridge Regression (L2 Regularization)
-**Task:** Stabilize linear regression under correlated predictors  
-**Dataset:** Energy Efficiency Dataset (same as above)
+**Task:** estimate a patient’s **serum creatinine** level (a kidney function biomarker) from demographic and cardiovascular measurements  
+**Dataset:** UCI Machine Learning Repository — **Heart Failure Clinical Records**  
 
 Focus:
 - Regularization impact
